@@ -5,11 +5,15 @@ local M = {}
 --- @field layout? snacks.picker.layout.Config | "default" | "dropdown" | "ivy" | "select" | "vscode"
 --- @field default_icon? { icon: string, highlight: string }
 --- @field path_icons? { match: string, icon: string, highlight: string }
+--- @field dir? string
+--- @field snacks_finder? snacks.picker.Finder
 M.config = {
     prompt_title = "Pick Session",
     layout = "default",
     default_icon = { icon = " ", highlight = "Directory" },
     path_icons = {},
+    dir = nil,
+    snacks_finder = nil,
 }
 
 local function apply_icon(display_value)
@@ -46,19 +50,29 @@ local function generate_sessions()
     return sessions
 end
 
-M.pick = function()
+M.pick = function(opts)
+    local snacks_finder = opts.snacks_finder or generate_sessions
+    local dir = opts.dir
     require("snacks").picker.pick({
         title = M.config.prompt_title,
-        finder = generate_sessions,
+        finder = snacks_finder,
         layout = M.config.layout,
         format = format_session_item,
         confirm = function(self, item)
             self:close()
-            require("resession").load(item.text)
+            if opts.dir then
+                require("resession").load(item.value, { dir = dir })
+            else
+                require("resession").load(item.value)
+            end
         end,
         actions = {
             delete_session = function(self, item)
-                require("resession").delete(item.text, { notify = false })
+                if dir then
+                    require("resession").delete(item.value, { dir = dir, notify = false })
+                else
+                    require("resession").delete(item.value, { notify = false })
+                end
                 self:find({
                     refresh = true,
                 })
