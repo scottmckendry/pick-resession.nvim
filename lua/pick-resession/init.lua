@@ -30,13 +30,8 @@ local function format_session_item(item)
 end
 
 local function generate_sessions(dir)
-    local rawsessions = nil
-    if dir ~= nil then
-        rawsessions = require("resession").list({ dir = dir })
-    else
-        rawsessions = require("resession").list()
-    end
     return function()
+        local rawsessions = (dir ~= nil) and require("resession").list({ dir = dir }) or require("resession").list()
         local sessions = {}
         for idx, session in ipairs(rawsessions) do
             local formatted = session:gsub("__", ":/"):gsub("_", "/")
