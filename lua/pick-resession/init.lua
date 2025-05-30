@@ -56,25 +56,23 @@ end
 
 M.pick = function(opts)
     opts = opts or {}
-    local snacks_finder = opts.snacks_finder or generate_sessions
-    local dir = opts.dir
     require("snacks").picker.pick({
         title = M.config.prompt_title,
-        finder = snacks_finder,
+        finder = opts.snacks_finder or generate_sessions(opts.dir),
         layout = M.config.layout,
         format = format_session_item,
         confirm = function(self, item)
             self:close()
             if opts.dir then
-                require("resession").load(item.value, { dir = dir })
+                require("resession").load(item.value, { dir = opts.dir })
             else
                 require("resession").load(item.value)
             end
         end,
         actions = {
             delete_session = function(self, item)
-                if dir then
-                    require("resession").delete(item.value, { dir = dir, notify = false })
+                if opts.dir ~= nil then
+                    require("resession").delete(item.value, { dir = opts.dir, notify = false })
                 else
                     require("resession").delete(item.value, { notify = false })
                 end
