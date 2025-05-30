@@ -5,15 +5,11 @@ local M = {}
 --- @field layout? snacks.picker.layout.Config | "default" | "dropdown" | "ivy" | "select" | "vscode"
 --- @field default_icon? { icon: string, highlight: string }
 --- @field path_icons? { match: string, icon: string, highlight: string }
---- @field dir? string
---- @field snacks_finder? snacks.picker.Finder
 M.config = {
     prompt_title = "Pick Session",
     layout = "default",
     default_icon = { icon = " ", highlight = "Directory" },
     path_icons = {},
-    dir = nil,
-    snacks_finder = nil,
 }
 
 local function apply_icon(display_value)
@@ -33,24 +29,33 @@ local function format_session_item(item)
     }
 end
 
-local function generate_sessions()
-    local sessions = {}
-    for idx, session in ipairs(require("resession").list()) do
-        local formatted = session:gsub("__", ":/"):gsub("_", "/")
-        --- @type snacks.picker.Item
-        sessions[#sessions + 1] = {
-            score = 0,
-            text = session,
-            value = session,
-            idx = idx,
-            display_value = formatted,
-            file = formatted,
-        }
+local function generate_sessions(dir)
+    local rawsessions = nil
+    if dir ~= nil then
+        rawsessions = require("resession").list({ dir = dir })
+    else
+        rawsessions = require("resession").list()
     end
-    return sessions
+    return function()
+        local sessions = {}
+        for idx, session in ipairs(rawsessions) do
+            local formatted = session:gsub("__", ":/"):gsub("_", "/")
+            --- @type snacks.picker.Item
+            sessions[#sessions + 1] = {
+                score = 0,
+                text = session,
+                value = session,
+                idx = idx,
+                display_value = formatted,
+                file = formatted,
+            }
+        end
+        return sessions
+    end
 end
 
 M.pick = function(opts)
+    opts = opts or {}
     local snacks_finder = opts.snacks_finder or generate_sessions
     local dir = opts.dir
     require("snacks").picker.pick({
