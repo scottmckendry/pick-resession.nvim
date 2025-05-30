@@ -82,7 +82,6 @@ With Snacks Picker:
 require("pick-resession").pick()
 ```
 
-
 **Key Maps:**
 
 | Picker | Mode           | Key Mapping | Description                 |
@@ -146,7 +145,7 @@ local function generate_sessions()
     return sessions
 end
 
--- Running `.pick()` will only return sesssions stored in the `gitsession`
+-- Running `.pick()` will only return sessions stored in the `gitsession`
 -- directory and that originate from the current working directory.
 require("pick-resession").pick({
     snacks_finder = generate_sessions,
