@@ -131,7 +131,7 @@ local function generate_sessions()
     for idx, session in ipairs(require("resession").list({ dir = "gitsession" })) do
         local formatted = session:gsub("__", ":/"):gsub("_", "/")
 
-        if formatted:match("^" .. cwd) then
+        if formatted:find(cwd, 1, true) == 1 then
             sessions[#sessions + 1] = {
                 score = 0,
                 text = session,
