@@ -29,36 +29,48 @@ local function format_session_item(item)
     }
 end
 
-local function generate_sessions()
-    local sessions = {}
-    for idx, session in ipairs(require("resession").list()) do
-        local formatted = session:gsub("__", ":/"):gsub("_", "/")
-        --- @type snacks.picker.Item
-        sessions[#sessions + 1] = {
-            score = 0,
-            text = session,
-            value = session,
-            idx = idx,
-            display_value = formatted,
-            file = formatted,
-        }
+local function generate_sessions(dir)
+    return function()
+        local rawsessions = (dir ~= nil) and require("resession").list({ dir = dir }) or require("resession").list()
+        local sessions = {}
+        for idx, session in ipairs(rawsessions) do
+            local formatted = session:gsub("__", ":/"):gsub("_", "/")
+            --- @type snacks.picker.Item
+            sessions[#sessions + 1] = {
+                score = 0,
+                text = session,
+                value = session,
+                idx = idx,
+                display_value = formatted,
+                file = formatted,
+            }
+        end
+        return sessions
     end
-    return sessions
 end
 
-M.pick = function()
+M.pick = function(opts)
+    opts = opts or {}
     require("snacks").picker.pick({
         title = M.config.prompt_title,
-        finder = generate_sessions,
+        finder = opts.snacks_finder or generate_sessions(opts.dir),
         layout = M.config.layout,
         format = format_session_item,
         confirm = function(self, item)
             self:close()
-            require("resession").load(item.text)
+            if opts.dir then
+                require("resession").load(item.value, { dir = opts.dir })
+            else
+                require("resession").load(item.value)
+            end
         end,
         actions = {
             delete_session = function(self, item)
-                require("resession").delete(item.text, { notify = false })
+                if opts.dir ~= nil then
+                    require("resession").delete(item.value, { dir = opts.dir, notify = false })
+                else
+                    require("resession").delete(item.value, { notify = false })
+                end
                 self:find({
                     refresh = true,
                 })

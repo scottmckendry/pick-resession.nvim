@@ -121,3 +121,35 @@ require("pick-resession").setup({
     },
 })
 ```
+
+### Example Snacks Picker Session Filtering
+
+```lua
+local function generate_sessions()
+    local cwd = vim.fn.getcwd()
+    local sessions = {}
+    for idx, session in ipairs(require("resession").list({ dir = "gitsession" })) do
+        local formatted = session:gsub("__", ":/"):gsub("_", "/")
+
+        if formatted:find(cwd, 1, true) == 1 then
+            sessions[#sessions + 1] = {
+                score = 0,
+                text = session,
+                value = session,
+                idx = idx,
+                display_value = formatted,
+                file = formatted,
+            }
+        end
+    end
+    return sessions
+end
+
+-- Running `.pick()` will only return sessions stored in the `gitsession`
+-- directory and that originate from the current working directory.
+require("pick-resession").pick({
+    snacks_finder = generate_sessions,
+    dir = "gitsession",
+})
+
+```
