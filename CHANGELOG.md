@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/scottmckendry/pick-resession.nvim/compare/v1.0.1...v1.1.0) (2025-06-01)
+
+
+### Features
+
+* opts for resession dir and snacks finder function ([#4](https://github.com/scottmckendry/pick-resession.nvim/issues/4)) ([ec3514d](https://github.com/scottmckendry/pick-resession.nvim/commit/ec3514d903d12cfa6a15e33f9e081b8a29bba337))
+
+
+### Bug Fixes
+
+* **ci:** skip doc gen on PRs ([8abd343](https://github.com/scottmckendry/pick-resession.nvim/commit/8abd34345f2d803876117bcb39cc75185f45f49e))
+
 ## [1.0.1](https://github.com/scottmckendry/pick-resession.nvim/compare/v1.0.0...v1.0.1) (2025-03-22)
 
 
