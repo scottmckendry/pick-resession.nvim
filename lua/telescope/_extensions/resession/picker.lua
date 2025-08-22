@@ -31,9 +31,12 @@ function M.load_session(prompt_bufnr)
 end
 
 --- Render the session picker
-function M.resession_picker()
+---@param layout nil|table
+function M.resession_picker(layout)
     local opts = require("telescope._extensions.resession.config").opts
-    local dropdown = themes.get_dropdown({})
+    if layout == nil or vim.deep_equal(layout, {}) then
+        layout = opts.layout
+    end
     local resession_opts = {
         prompt_title = opts.prompt_title,
         finder = require("telescope.finders").new_table({
@@ -51,7 +54,7 @@ function M.resession_picker()
         sorter = sorters.get_fzy_sorter(),
     }
 
-    return pickers.new(dropdown, resession_opts):find()
+    return pickers.new(layout, resession_opts):find()
 end
 
 return M
