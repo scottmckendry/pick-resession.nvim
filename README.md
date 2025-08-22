@@ -19,6 +19,7 @@ A picker plugin for the wonderful [resession.nvim](https://github.com/stevearc/r
                 resession = {
                     prompt_title = "Find Sessions", -- telescope prompt title
                     dir = "session", -- directory where resession stores sessions
+                    layout = require("telescope.themes").get_dropdown(), -- telescope picker layout
                 },
             },
         })
@@ -74,6 +75,8 @@ With Telescope:
 
 ```lua
 require("telescope").extensions.resession.resession()
+-- Can overwrite picker layout:
+-- require("telescope").extensions.resession.resession(require("telescope.themes").get_ivy())
 ```
 
 With Snacks Picker:
