@@ -36,6 +36,9 @@ function M.resession_picker(layout)
     local opts = require("telescope._extensions.resession.config").opts
     if layout == nil or vim.deep_equal(layout, {}) then
         layout = opts.layout
+        if layout == nil then
+            layout = themes.get_dropdown()
+        end
     end
     local resession_opts = {
         prompt_title = opts.prompt_title,
