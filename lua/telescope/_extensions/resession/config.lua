@@ -6,10 +6,12 @@ local M = {}
 
 --- @class config
 --- @field path_substitutions? substitution[] A list of substitutions to apply to paths
+--- @field layout table|nil Picker layout passed to telescope.
 M.defaults = {
     prompt_title = "Find Session",
     dir = "session",
     path_substitutions = {},
+    layout = nil,
 }
 
 M.opts = {}
