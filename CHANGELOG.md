@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/scottmckendry/pick-resession.nvim/compare/v1.1.0...v1.2.0) (2026-10-08)
+
+
+### Features
+
+* **telescope:** support for custom layouts ([#6](https://github.com/scottmckendry/pick-resession.nvim/issues/6)) ([ba5fc0c](https://github.com/scottmckendry/pick-resession.nvim/commit/ba5fc0c10ba8b19f30f040c6aed4a008395b7e15))
+
+
+### Bug Fixes
+
+* broken session delete action in snacks picker ([52fd9c3](https://github.com/scottmckendry/pick-resession.nvim/commit/52fd9c3fe5914781c9a970242e14e35a7b82a54d))
+
 ## [1.1.0](https://github.com/scottmckendry/pick-resession.nvim/compare/v1.0.1...v1.1.0) (2025-06-01)
 
 
