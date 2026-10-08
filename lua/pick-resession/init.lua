@@ -7,7 +7,7 @@ local M = {}
 --- @field path_icons? { match: string, icon: string, highlight: string }
 M.config = {
     prompt_title = "Pick Session",
-    layout = "default",
+    layout = "vscode",
     default_icon = { icon = " ", highlight = "Directory" },
     path_icons = {},
 }
@@ -71,9 +71,7 @@ M.pick = function(opts)
                 else
                     require("resession").delete(item.value, { notify = false })
                 end
-                self:find({
-                    refresh = true,
-                })
+                self:refresh()
             end,
         },
         win = {
